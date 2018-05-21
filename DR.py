@@ -173,6 +173,7 @@ model.compile(loss=keras.losses.categorical_crossentropy,
               optimizer=keras.optimizers.Adadelta(),
               metrics=['accuracy'])
 
+# save the model corresponding to lowest validation error
 modelsave = ModelCheckpoint(
     filepath='retinopathy.h5', monitor='val_acc', save_best_only=True, verbose=1, mode='max')
 
@@ -180,6 +181,10 @@ modelsave = ModelCheckpoint(
 iterations = 400
 train_loss = np.zeros((iterations,1))
 val_loss = np.zeros((iterations,1))
+
+# the distribution of data is very skewed with class four and five having very few examples. Hence to balance the
+# data distribution, I have appropriately weighted the data in each class 
+# before training. 
 class_weight = {0 : 1.0, 1: 1.63, 2: 1.0, 3: 4.58, 4: 5.64}
 
 for iteration in range(iterations):
